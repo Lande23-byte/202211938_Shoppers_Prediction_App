@@ -1,0 +1,15 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Shoppers Prediction</title>
+  </head>
+  <body>
+    <h2>Enter Features</h2>
+    <form action="/predict" method="post">
+      {% for i in range(num_features) %}
+        <input type="text" name="feature{{ i }}" placeholder="Feature {{ i + 1 }}"><br>
+      {% endfor %}
+      <button type="submit">Predict</button>
+    </form>
+  </body>
+</html>
