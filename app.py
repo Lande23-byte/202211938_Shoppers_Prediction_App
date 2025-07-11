@@ -3,22 +3,23 @@ import joblib
 import numpy as np
 
 app = Flask(__name__)
-
-# Load your trained model
-model = joblib.load('shoppers_model_202211938.pkl')
-
-# Set this to match your model input size
-num_features = 25
+model = joblib.load("model_202211938.pkl")
+NUM_FEATURES = 17  # Replace with actual number of features in X
 
 @app.route('/')
-def form():
-    return render_template('form.html', num_features=num_features)
+def home():
+    return render_template('form.html', NUM_FEATURES=NUM_FEATURES)
 
 @app.route('/predict', methods=['POST'])
 def predict():
-    data = [float(x) for x in request.form.values()]
-    prediction = model.predict([data])[0]
-    return f"<h1>Prediction: {'Purchase' if prediction else 'No Purchase'}</h1>"
+    try:
+        data = [float(x) for x in request.form.values()]
+        prediction = model.predict([data])[0]
+        result = '✅ Will Purchase' if prediction == 1 else '❌ Will Not Purchase'
+    except:
+        result = "⚠️ Invalid input. Please enter numeric values only."
+
+    return render_template('form.html', prediction=result, NUM_FEATURES=NUM_FEATURES)
 
 if __name__ == '__main__':
     app.run(debug=True)
